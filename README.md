@@ -11,5 +11,6 @@
 </p>
 <p>
   ✨This game is made using JavaScript and Kaboom.js (a JS library!) https://kaboomjs.com/
-  ✨Inspiration for this game came from freeCodeCamp.com!
+</br>
+  ✨Inspiration for this game came from freeCodeCamp.com
 </p>
