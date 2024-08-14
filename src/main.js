@@ -52,7 +52,7 @@ k.scene("main", async () => {
     "player",
   ]);
 
-  for (const layers of layer) {
+  for (const layer of layers) {
     if (layer.name === "boundaries") {
       for (const boundary of layer.objects) {
         map.add([
