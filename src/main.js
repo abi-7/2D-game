@@ -1,4 +1,6 @@
-import { k } from "./kaboom";
+import { dialogueData, scaleFactor } from "./constant";
+import { k } from "./kaboomCtx";
+import { displayDialogue, setCamScale } from "./utils";
 
 //load character
 //slice sheet into frames needed
@@ -33,6 +35,7 @@ k.scene("main", async () => {
     k.scale(scaleFactor), //scale up map since its pixel art
   ]);
 
+  //create player
   const player = k.make([
     k.sprite("spritesheet", { anim: "idle-down" }),
     k.area({ shape: new k.Rect(k.vec2(0, 3), 10, 10) }),
@@ -49,13 +52,10 @@ k.scene("main", async () => {
     "player",
   ]);
 
-  for (const layer of layers) {
+  for (const layers of layer) {
     if (layer.name === "boundaries") {
       for (const boundary of layer.objects) {
         map.add([
-          //comes from tiled
-          //hit box
-          //position of game object - pos of hit box for game object (area)
           k.area({
             shape: new k.Rect(k.vec2(0), boundary.width, boundary.height),
           }),
@@ -67,7 +67,7 @@ k.scene("main", async () => {
 
         if (boundary.name) {
           //set collisoon events
-          //check collision withs the player and the boundaray tag
+          //check collision with the player and the boundaray tag
           player.onCollide(boundary.name, () => {
             //runs when colision occurs
             //prevent player from moving when diagloue is in view
@@ -94,4 +94,80 @@ k.scene("main", async () => {
       }
     }
   }
+
+  setCamScale(k);
+
+  k.onResize(() => {
+    setCamScale(k);
+  });
+  //control camer follows player
+  k.onUpdate(() => {
+    k.camPos(player.pos.x, player.pos.y + 100);
+  });
+
+  //moving the player
+  k.onMouseDown((mouseBtn) => {
+    if (mouseBtn !== "left" || player.isInDialogue) return;
+
+    //get world mouse pos
+    //moveTo moves the player
+    const worldMousePos = k.toWorld(k.mousePos());
+    //target pos at what speed - params
+    player.moveTo(worldMousePos, player.speed);
+
+    const mouseAngle = player.pos.angle(worldMousePos);
+
+    const lowerBound = 50;
+    const upperBound = 125;
+
+    if (
+      mouseAngle > lowerBound &&
+      mouseAngle < upperBound &&
+      player.curAnim() !== "walk-up"
+    ) {
+      player.play("walk-up");
+      player.direction = "up";
+      return;
+    }
+
+    if (
+      mouseAngle < -lowerBound &&
+      mouseAngle > -upperBound &&
+      player.curAnim() !== "walk-down"
+    ) {
+      player.play("walk-down");
+      player.direction = "down";
+      return;
+    }
+
+    if (Math.abs(mouseAngle) > upperBound) {
+      player.flipX = false; //when player is flipped changes from true/flase
+      if (player.curAnim() !== "walk-side") player.play("walk-side");
+      player.direction = "left";
+      return;
+    }
+
+    if (Math.abs(mouseAngle) < lowerBound) {
+      player.flipX = true;
+      if (player.curAnim() !== "walk-side") player.play("walk-side");
+      player.direction = "right";
+      return;
+    }
+  });
+
+  //when no movement is happening player is in 'idle' mode
+  k.onMouseRelease(() => {
+    if (player.direction === "down") {
+      player.play("idle-down");
+      return;
+    }
+    if (player.direction === "up") {
+      player.play("idle-up");
+      return;
+    }
+
+    player.play("idle-side");
+  });
 });
+
+k.go("main"); //go to main scene

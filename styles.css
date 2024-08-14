@@ -39,7 +39,7 @@ body {
   user-select: none;
 }
 
-.ui-btn {
+.ui-close-btn {
   font-family: inherit;
   border-radius: 3px;
   border-style: none;
@@ -52,7 +52,7 @@ body {
   margin-top: 1rem;
 }
 
-.instruction {
+.note {
   position: absolute;
   left: 5%;
   top: 1vh;
