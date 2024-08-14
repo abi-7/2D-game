@@ -8,19 +8,6 @@ export function displayDialogue(text, onDisplayEnd) {
   let currentText = "";
   currentText += text;
   dialogue.innerHTML = currentText;
-  
-
-  // let index = 0;
-  // let currentText = "";
-  // //function runs every 5 secs
-  // const intervalRef = setInterval(() => {
-  //   if (index < text.length) {
-  //     currentText += text[index];
-  //     dialogue.innerHTML = currentText; //helps render links as clickable links
-  //     index++;
-  //     return;
-  //   }
-  // }, speed);
 
   const closeBtn = document.getElementById("close");
 
