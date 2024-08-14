@@ -2,6 +2,14 @@ import { dialogueData, scaleFactor } from "./constant";
 import { k } from "./kaboomCtx";
 import { displayDialogue, setCamScale } from "./utils";
 
+var modal = document.getElementById("myModal");
+var btn = document.getElementById("modal-close");
+
+//close the modal
+btn.onclick = function() {
+  modal.style.display = "none";
+}
+
 //load character
 //slice sheet into frames needed
 k.loadSprite("spritesheet", "./spritesheet.png", {
