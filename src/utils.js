@@ -5,20 +5,22 @@ export function displayDialogue(text, onDisplayEnd) {
   //to show dialogue - makes textbox visible
   dialogueUI.style.display = "block";
 
-  //implement text scrolling
-  let index = 0;
   let currentText = "";
-  //function runs every 5 secs
-  const intervalRef = setInterval(() => {
-    if (index < text.length) {
-      currentText += text[index];
-      dialogue.innerHTML = currentText; //helps render links as clickable links
-      index++;
-      return;
-    }
+  currentText += text;
+  dialogue.innerHTML = currentText;
+  
 
-    clearInterval(intervalRef);
-  }, 5);
+  // let index = 0;
+  // let currentText = "";
+  // //function runs every 5 secs
+  // const intervalRef = setInterval(() => {
+  //   if (index < text.length) {
+  //     currentText += text[index];
+  //     dialogue.innerHTML = currentText; //helps render links as clickable links
+  //     index++;
+  //     return;
+  //   }
+  // }, speed);
 
   const closeBtn = document.getElementById("close");
 
