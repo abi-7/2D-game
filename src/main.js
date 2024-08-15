@@ -4,27 +4,93 @@ import { displayDialogue, setCamScale } from "./utils";
 
 var modal = document.getElementById("myModal");
 var btn = document.getElementById("modal-close");
+var modalContent = document.getElementById("content");
 
 //close the modal
-btn.onclick = function() {
+btn.onclick = function () {
   modal.style.display = "none";
+};
+
+const sprites = {
+  boyBrownHair: k.loadSprite("boy", "./spritesheet.png", {
+    sliceX: 39,
+    sliceY: 31,
+    //attach names to animations
+    anims: {
+      "idle-down": 936,
+      "walk-down": { from: 936, to: 939, loop: true, speed: 8 },
+      "idle-side": 975,
+      "walk-side": { from: 975, to: 978, loop: true, speed: 8 },
+      "idle-up": 1014,
+      "walk-up": { from: 1014, to: 1017, loop: true, speed: 8 },
+    },
+  }),
+  Ghost: k.loadSprite("ghost", "./spritesheet.png", {
+    sliceX: 39,
+    sliceY: 31,
+    //attach names to animations
+    anims: {
+      "idle-down": 862,
+      "walk-down": { from: 862, to: 863, loop: true, speed: 8 },
+      "idle-side": 864,
+      "walk-side": { from: 864, to: 865, loop: true, speed: 8 },
+      "idle-up": 901,
+      "walk-up": { from: 901, to: 902, loop: true, speed: 8 },
+    },
+  }),
+};
+
+//user will choose from list of sprites
+//display content in modal
+function displaySprites() {
+  modalContent.innerHTML = ""; // Clear the modal content
+
+  //create a list of sprite options
+  Object.keys(sprites).forEach((spriteName) => {
+    const spriteOption = document.createElement("div");
+    spriteOption.classList.add("sprite-option");
+
+    //add a label with the sprite name
+    const label = document.createElement("p");
+    label.textContent = spriteName;
+    spriteOption.appendChild(label);
+
+    //add a preview of the sprite
+    //create a small Kaboom instance to render the sprite preview
+    k.drawSprite({
+      sprite: spriteName,
+      pos: k.vec2(100, 200),
+      frame: "idle-down",
+    });
+
+    //handle sprite selection
+    spriteOption.onclick = () => {
+      selectSprite(spriteName);
+    };
+
+    modalContent.appendChild(spriteOption);
+  });
+
+  modal.style.display = "block"; // Show the modal
 }
 
-//load character
-//slice sheet into frames needed
-k.loadSprite("spritesheet", "./spritesheet.png", {
-  sliceX: 39,
-  sliceY: 31,
-  //attach names to animations
-  anims: {
-    "idle-down": 936,
-    "walk-down": { from: 936, to: 939, loop: true, speed: 8 },
-    "idle-side": 975,
-    "walk-side": { from: 975, to: 978, loop: true, speed: 8 },
-    "idle-up": 1014,
-    "walk-up": { from: 1014, to: 1017, loop: true, speed: 8 },
-  },
-});
+//when modal is showing display options
+function showModal() {
+  if (modal.style.display !== "block") {
+    displaySprites();
+  }
+}
+
+showModal();
+
+//get what user chose
+function selectSprite(spriteName) {
+  console.log(`Selected sprite: ${spriteName}`);
+
+  //use the selected sprite to update the player sprite later in the main scene.
+  selectedSprite = spriteName;
+  modal.style.display = "none";
+}
 
 //load map
 k.loadSprite("map", "./map.png");
