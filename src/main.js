@@ -6,13 +6,20 @@ var modal = document.getElementById("myModal");
 var btn = document.getElementById("modal-close");
 var modalContent = document.getElementById("content");
 
-//close the modal
+
+//close the modal event
 btn.onclick = function () {
+  // Ensure the sprite is selected
+  if (!selectedSprite) {
+    console.error("No sprite selected!");
+    return;
+  }
   modal.style.display = "none";
 };
 
+//load sprite options
 const sprites = {
-  boyBrownHair: k.loadSprite("boy", "./spritesheet.png", {
+  boyBrownHair: k.loadSprite("boyBrownHair", "./spritesheet.png", {
     sliceX: 39,
     sliceY: 31,
     //attach names to animations
@@ -25,7 +32,7 @@ const sprites = {
       "walk-up": { from: 1014, to: 1017, loop: true, speed: 8 },
     },
   }),
-  Ghost: k.loadSprite("ghost", "./spritesheet.png", {
+  Ghost: k.loadSprite("Ghost", "./spritesheet.png", {
     sliceX: 39,
     sliceY: 31,
     //attach names to animations
@@ -41,31 +48,28 @@ const sprites = {
 };
 
 //user will choose from list of sprites
-//display content in modal
 function displaySprites() {
-  modalContent.innerHTML = ""; // Clear the modal content
+  modalContent.innerHTML = "";
 
   //create a list of sprite options
   Object.keys(sprites).forEach((spriteName) => {
     const spriteOption = document.createElement("div");
-    spriteOption.classList.add("sprite-option");
 
     //add a label with the sprite name
     const label = document.createElement("p");
     label.textContent = spriteName;
     spriteOption.appendChild(label);
 
-    //add a preview of the sprite
-    //create a small Kaboom instance to render the sprite preview
-    k.drawSprite({
-      sprite: spriteName,
-      pos: k.vec2(100, 200),
-      frame: "idle-down",
-    });
+    //preview of sprite
+    const preview = k.add([
+      k.sprite(spriteName, { frame: "idle-down" }),
+      k.pos(100, 200),
+    ]);
 
     //handle sprite selection
     spriteOption.onclick = () => {
       selectSprite(spriteName);
+      preview.destroy();
     };
 
     modalContent.appendChild(spriteOption);
@@ -85,10 +89,11 @@ showModal();
 
 //get what user chose
 function selectSprite(spriteName) {
-  console.log(`Selected sprite: ${spriteName}`);
+  console.log(`Selected spriteName: ${spriteName}`);
+  const selectedSprite = spriteName;
+  console.log(`Selected sprite: ${selectedSprite}`);
 
   //use the selected sprite to update the player sprite later in the main scene.
-  selectedSprite = spriteName;
   modal.style.display = "none";
 }
 
@@ -111,7 +116,7 @@ k.scene("main", async () => {
 
   //create player
   const player = k.make([
-    k.sprite("spritesheet", { anim: "idle-down" }),
+    k.sprite(selectedSprite, { anim: "idle-down" }),
     k.area({ shape: new k.Rect(k.vec2(0, 3), 10, 10) }),
     k.body(),
     k.anchor("center"), //drawn in center not top corner
@@ -244,4 +249,6 @@ k.scene("main", async () => {
   });
 });
 
-k.go("main"); //go to main scene
+ k.go("main"); //go to main scene
+
+
