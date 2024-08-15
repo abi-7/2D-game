@@ -78,6 +78,19 @@ const sprites = {
       "walk-up": { from: 1022, to: 1025, loop: true, speed: 8 },
     },
   }),
+  Wizard: k.loadSprite("Wizard", "./spritesheet.png", {
+    sliceX: 39,
+    sliceY: 31,
+    //attach names to animations
+    anims: {
+      "idle-down": 784,
+      "walk-down": { from: 784, to: 785, loop: true, speed: 8 },
+      "idle-side": 786,
+      "walk-side": { from: 786, to: 787, loop: true, speed: 8 },
+      "idle-up": 823,
+      "walk-up": { from: 823, to: 824, loop: true, speed: 8 },
+    },
+  }),
 };
 
 //user will choose from list of sprites
