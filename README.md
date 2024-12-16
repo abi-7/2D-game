@@ -14,5 +14,5 @@
 <p>
   ✨This game is made using JavaScript and Kaboom.js (a JS library!) https://kaboomjs.com/
 </br>
-  ✨Inspiration for this game and how I learnt Kaboom came from https://www.freecodecamp.org/ 
-</p>
+
+<img src = "https://github.com/abi-7/2D-Game/main/About Me Recording.gif">
